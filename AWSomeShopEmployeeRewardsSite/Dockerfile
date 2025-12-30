@@ -1,5 +1,6 @@
 # Multi-stage build for optimized production image
-FROM node:18-alpine AS builder
+# Explicitly use amd64 architecture for ECS Fargate compatibility
+FROM --platform=linux/amd64 node:18-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -16,8 +17,8 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Production stage
-FROM nginx:alpine
+# Production stage - explicitly use amd64 architecture
+FROM --platform=linux/amd64 nginx:alpine
 
 # Copy custom nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf

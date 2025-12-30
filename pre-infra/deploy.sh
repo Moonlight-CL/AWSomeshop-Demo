@@ -44,13 +44,30 @@ ECR_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY_
 IMAGE_TAG="${ENVIRONMENT}-$(date +%Y%m%d-%H%M%S)"
 FULL_IMAGE_URI="${ECR_URI}:${IMAGE_TAG}"
 
-# Step 2: Build Docker Image
+# Step 2: Build Docker Image (Multi-platform for ECS compatibility)
 echo -e "\n${GREEN}[2/6] Building Docker Image...${NC}"
 cd ../AWSomeShopEmployeeRewardsSite
-docker build -t ${ECR_REPOSITORY_NAME}:${IMAGE_TAG} .
+
+# Check if buildx is available
+if ! docker buildx version > /dev/null 2>&1; then
+    echo -e "${YELLOW}Warning: docker buildx not available, using standard build${NC}"
+    docker build -t ${ECR_REPOSITORY_NAME}:${IMAGE_TAG} .
+else
+    echo "Building multi-platform image for linux/amd64..."
+    # Create buildx builder if it doesn't exist
+    docker buildx create --name awsomeshop-builder --use 2>/dev/null || docker buildx use awsomeshop-builder
+    
+    # Build for linux/amd64 (ECS Fargate architecture)
+    docker buildx build \
+        --platform linux/amd64 \
+        --tag ${ECR_REPOSITORY_NAME}:${IMAGE_TAG} \
+        --load \
+        .
+fi
+
 docker tag ${ECR_REPOSITORY_NAME}:${IMAGE_TAG} ${FULL_IMAGE_URI}
 docker tag ${ECR_REPOSITORY_NAME}:${IMAGE_TAG} ${ECR_URI}:latest
-echo -e "${GREEN}✓ Docker image built${NC}"
+echo -e "${GREEN}✓ Docker image built for linux/amd64${NC}"
 
 # Step 3: Login to ECR
 echo -e "\n${GREEN}[3/6] Logging in to ECR...${NC}"
@@ -65,7 +82,7 @@ echo -e "${GREEN}✓ Docker image pushed${NC}"
 
 # Step 5: Deploy CloudFormation Stack
 echo -e "\n${GREEN}[5/6] Deploying CloudFormation Stack...${NC}"
-cd ../infrastructure
+cd ../pre-infra
 
 # Check if stack exists
 if aws cloudformation describe-stacks --stack-name ${STACK_NAME} --region ${AWS_REGION} > /dev/null 2>&1; then

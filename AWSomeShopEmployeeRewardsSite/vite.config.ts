@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite'
-import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 
@@ -12,8 +11,20 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      // Alias @ to the src directory
-      '@': path.resolve(__dirname, './src'),
+      // Alias @ to the src directory (Vite resolves relative to config file)
+      '@': './src',
     },
+  },
+  server: {
+    // 开发服务器配置
+    port: 5173,
+    // 可选：配置代理，让开发环境也能使用相对路径（与生产环境一致）
+    // 取消注释以下配置以启用代理模式
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://localhost:8000',
+    //     changeOrigin: true,
+    //   },
+    // },
   },
 })

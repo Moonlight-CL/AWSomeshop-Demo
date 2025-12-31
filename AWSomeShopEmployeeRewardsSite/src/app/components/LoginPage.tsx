@@ -18,14 +18,11 @@ export const LoginPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const success = await login(username, password);
-      if (success) {
-        toast.success('登录成功！');
-      } else {
-        toast.error('用户名或密码错误');
-      }
-    } catch (error) {
-      toast.error('登录失败，请重试');
+      await login(username, password);
+      toast.success('登录成功！');
+    } catch (error: any) {
+      // 显示后端返回的错误消息
+      toast.error(error.message || '登录失败，请重试');
     } finally {
       setIsLoading(false);
     }
@@ -58,6 +55,7 @@ export const LoginPage: React.FC = () => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
+                  disabled={isLoading}
                 />
               </div>
               <div className="space-y-2">
@@ -69,6 +67,7 @@ export const LoginPage: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  disabled={isLoading}
                 />
               </div>
               <Button type="submit" className="w-full" disabled={isLoading}>
@@ -79,9 +78,8 @@ export const LoginPage: React.FC = () => {
             <div className="mt-6 p-4 bg-blue-50 rounded-lg">
               <p className="text-sm text-gray-600 mb-2">测试账号：</p>
               <div className="text-xs text-gray-500 space-y-1">
-                <p>管理员：admin / password123</p>
-                <p>员工：zhangsan / password123</p>
-                <p>员工：lisi / password123</p>
+                <p>使用后端创建的 Cognito 用户登录</p>
+                <p>密码由管理员设置</p>
               </div>
             </div>
           </CardContent>

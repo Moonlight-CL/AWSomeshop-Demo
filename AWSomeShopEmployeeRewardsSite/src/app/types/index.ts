@@ -53,3 +53,38 @@ export interface Statistics {
   totalRedemptions: number;
   popularProducts: { productId: string; productName: string; count: number }[];
 }
+
+// Auth Response Types
+export interface LoginResponse {
+  access_token: string;
+  id_token: string;
+  refresh_token: string;
+  token_type: string;
+  expires_in: number;
+  user: User;
+}
+
+export interface TokenStorage {
+  access_token: string;
+  id_token: string;
+  refresh_token: string;
+  username: string;
+}
+
+// API Response Types
+export interface APIResponse<T> {
+  success: boolean;
+  data: T;
+  error?: {
+    code: string;
+    message: string;
+  };
+}
+
+export interface PaginatedResponse<T> {
+  items: T[];
+  total: number;
+  page: number;
+  limit: number;
+  pages: number;
+}

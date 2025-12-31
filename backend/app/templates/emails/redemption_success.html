@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>兑换成功通知</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .success-icon {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .message {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #666;
+        }
+        .info-value {
+            color: #333;
+            text-align: right;
+        }
+        .redemption-code {
+            background-color: #fff3cd;
+            border: 2px dashed #ffc107;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+            border-radius: 8px;
+        }
+        .redemption-code-label {
+            font-size: 14px;
+            color: #856404;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .redemption-code-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #856404;
+            letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 20px 0;
+        }
+        .highlight {
+            color: #667eea;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AWSomeShop 积分商城</h1>
+        </div>
+
+        <div class="content">
+            <div class="success-icon">✅</div>
+            <div class="message">
+                <p>恭喜您，兑换成功！</p>
+                <p>您的订单已生成，以下是您的兑换详情：</p>
+            </div>
+
+            <div class="info-box">
+                <div class="info-row">
+                    <span class="info-label">订单号：</span>
+                    <span class="info-value">{{ order_id }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">产品名称：</span>
+                    <span class="info-value">{{ product_name }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">兑换数量：</span>
+                    <span class="info-value">{{ quantity }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">消耗积分：</span>
+                    <span class="info-value highlight">{{ points_spent }} 积分</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">兑换时间：</span>
+                    <span class="info-value">{{ redemption_time }}</span>
+                </div>
+            </div>
+
+            <div class="redemption-code">
+                <div class="redemption-code-label">🎁 您的兑换码</div>
+                <div class="redemption-code-value">{{ redemption_code }}</div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="color: #666; font-size: 14px;">
+                    请妥善保管您的兑换码，使用时向商家出示即可。
+                </p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>感谢您使用 AWSomeShop 积分商城</p>
+            <p>如有任何问题，请联系我们的客服团队</p>
+            <p style="margin-top: 15px; font-size: 12px; color: #999;">
+                此邮件由系统自动发送，请勿回复
+            </p>
+        </div>
+    </div>
+</body>
+</html>

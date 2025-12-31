@@ -3,4 +3,5 @@
 .amazonq/
 awsomeshop-backend/
 database/
-preinfra/
+pre-infra/
+.DS_Store
